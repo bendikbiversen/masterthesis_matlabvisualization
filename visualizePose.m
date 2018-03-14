@@ -53,7 +53,11 @@ t_pnp = zeros(num_tpnp, 3);
 n = 1;
 m = 1;
 for i = 1:tpnp_count
-    t_pnp(m, n) = tvec_pnp(i);
+    if tvec_pnp(i)^2 > 1000^2
+        t_pnp(m, n) = 0;
+    else
+        t_pnp(m, n) = tvec_pnp(i);
+    end
     n = n+1;
     if mod(i, 3) == 0
        n = 1; 
@@ -72,9 +76,7 @@ for i = 1:num_tpnp
     t_pnp_avg(3) = t_pnp_avg(3) + t_pnp(i, 3);
 end
 
-t_pnp_avg(1) = t_pnp_avg(1)/num_tpnp;
-t_pnp_avg(2) = t_pnp_avg(1)/num_tpnp;
-t_pnp_avg(3) = t_pnp_avg(1)/num_tpnp;
+t_pnp_avg = t_pnp_avg/num_tpnp
 
 figure(2)
 hold on
@@ -117,13 +119,13 @@ figure(3)
 hold on
 subplot(3,1,1)
 plot(orientation(:, 1));
-title('x')
+title('Global orientation: alpha')
 grid on
 subplot(3,1,2)
 plot(orientation(:, 2));
-title('y')
+title('Global orientation: theta')
 grid on
 subplot(3,1,3)
 plot(orientation(:, 3));
-title('z')
+title('Global orientation: psi')
 grid on

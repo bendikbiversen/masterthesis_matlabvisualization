@@ -2,8 +2,8 @@ close all
 clc
 clear all 
 
-%% t_matrix_global and tvec_pnp
-%Opening t_matrix_global and creating a Nx3 vector pos_xyz (final pos)
+%% Accumulated translation t_matrix_global
+
 t_fileID = fopen('t_matrix_global.txt', 'r');
 [tvec, t_count] = fscanf(t_fileID, '%f');
 fclose(t_fileID);
@@ -41,14 +41,14 @@ plot(pos_xyz(:, 3));
 title('z')
 grid on
 
-%Opening tvec_pnp_matrix and creating a Nx3 vector t_pnp (local translation from solvePnP)
+%% Output translation vector from solvePnP
 tpnp_fileID = fopen('tvec_pnp_matrix.txt', 'r');
 [tvec_pnp, tpnp_count] = fscanf(tpnp_fileID, '%f');
 fclose(tpnp_fileID);
 
-num_t = tpnp_count/3;
+num_tpnp = tpnp_count/3;
 %num_t = 30;
-t_pnp = zeros(num_t, 3);
+t_pnp = zeros(num_tpnp, 3);
 
 n = 1;
 m = 1;
@@ -59,10 +59,22 @@ for i = 1:tpnp_count
        n = 1; 
        m = m+1;
     end
-    if m == num_t
+    if m == num_tpnp
         break
     end
 end
+
+t_pnp_avg = zeros(1, 3);
+
+for i = 1:num_tpnp
+    t_pnp_avg(1) = t_pnp_avg(1) + t_pnp(i, 1);
+    t_pnp_avg(2) = t_pnp_avg(2) + t_pnp(i, 2);
+    t_pnp_avg(3) = t_pnp_avg(3) + t_pnp(i, 3);
+end
+
+t_pnp_avg(1) = t_pnp_avg(1)/num_tpnp;
+t_pnp_avg(2) = t_pnp_avg(1)/num_tpnp;
+t_pnp_avg(3) = t_pnp_avg(1)/num_tpnp;
 
 figure(2)
 hold on
@@ -79,6 +91,7 @@ plot(t_pnp(:, 3));
 title('tvec pnp.z')
 grid on
 
+%% Accumulated orientation R_matrix_global
 R_fileID = fopen('R_matrix_global.txt', 'r');
 [rvec, R_count] = fscanf(R_fileID, '%f');
 fclose(R_fileID);
@@ -104,13 +117,13 @@ figure(3)
 hold on
 subplot(3,1,1)
 plot(orientation(:, 1));
-title('x')
+title('Global orientation: alpha')
 grid on
 subplot(3,1,2)
 plot(orientation(:, 2));
-title('y')
+title('Global orientation: theta')
 grid on
 subplot(3,1,3)
 plot(orientation(:, 3));
-title('z')
+title('Global orientation: psi')
 grid on
