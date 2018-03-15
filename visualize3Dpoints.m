@@ -35,7 +35,11 @@ points3d_cv = zeros(numPoints_cv, 3);
 n = 1;
 m = 1;
 for i = 1:count_cv
-    points3d_cv(m, n) = B(i);
+    if sqrt(B(i)^2) > 1000
+        points3d_cv(m, n) = 0;
+    else
+        points3d_cv(m, n) = B(i);
+    end
     n = n+1;
     if mod(i, 3) == 0
        n = 1; 

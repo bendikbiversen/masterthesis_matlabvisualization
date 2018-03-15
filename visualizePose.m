@@ -93,6 +93,31 @@ plot(t_pnp(:, 3));
 title('tvec pnp.z')
 grid on
 
+%% t_matrix_global and t_matrix_pnp in same plot
+
+figure(3)
+subplot(3,1,1)
+hold on
+plot(t_pnp(:, 1));
+plot(pos_xyz(:, 1));
+legend('x_pnp', 'x_global');
+title('x')
+grid on
+subplot(3,1,2)
+hold on
+plot(t_pnp(:, 2));
+plot(pos_xyz(:, 2));
+legend('y_pnp', 'y_global');
+title('y')
+grid on
+subplot(3,1,3)
+hold on
+plot(t_pnp(:, 3));
+plot(pos_xyz(:, 3));
+legend('z_pnp', 'z_global');
+title('z')
+grid on
+
 %% Accumulated orientation R_matrix_global
 R_fileID = fopen('R_matrix_global.txt', 'r');
 [rvec, R_count] = fscanf(R_fileID, '%f');
@@ -115,7 +140,7 @@ for i = 1:R_count
     end
 end
 
-figure(3)
+figure(4)
 hold on
 subplot(3,1,1)
 plot(orientation(:, 1));
